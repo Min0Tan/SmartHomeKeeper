@@ -1,0 +1,37 @@
+{
+  "expo": {
+    "name": "SmartHomekeeper",
+    "slug": "SmartHomekeeper",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/SHK_icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/SHK_splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.SmartHomekeeper.SmartHomekeeper"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/SHK_adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.SmartHomekeeper.SmartHomekeeper"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "30bd36a3-d435-49d5-922d-872f73c4cf36"
+      }
+    }
+  }
+}
