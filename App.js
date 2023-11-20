@@ -38,7 +38,6 @@ function TypeScreen({ navigation }) {
     <View>
       <Button title="TV" onPress={() => navigation.navigate('AddTVScreen')} />
       <Button title="AC" onPress={() => navigation.navigate('AddACScreen')} />
-      <Button title="조명" onPress={() => {/* 조명 제품을 추가하는 화면으로 이동하는 코드 */}} />
     </View>
   );
 }
@@ -143,30 +142,6 @@ function AddACScreen() {
   );
 }
 
-function AddLightScreen() {
-  const { tvs, setTVs } = useContext(TVContext);
-  const [selectedValue, setSelectedValue] = useState('TV1');
-
-  const handleComplete = () => {
-    setTVs([...tvs, selectedValue]);
-    Alert.alert(`${selectedValue}  등록이 완료되었습니다.`);
-  };
-
-  return (
-    <View>
-      <Picker
-        selectedValue={selectedValue}
-        onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-      >
-        <Picker.Item label="TV1" value="TV1" />
-        <Picker.Item label="TV2" value="TV2" />
-        <Picker.Item label="TV3" value="TV3" />
-      </Picker>
-      <Button title="완료" onPress={handleComplete} />
-    </View>
-  );
-}
-
 function DeleteScreen({ navigation }) {
   const { tvs, setTVs } = useContext(TVContext);
   const { acs, setACs } = useContext(ACContext);
@@ -235,7 +210,6 @@ export default function App() {
           <Stack.Screen name="TypeScreen" component={TypeScreen} />
           <Stack.Screen name="AddTVScreen" component={AddTVScreen} />
           <Stack.Screen name="AddACScreen" component={AddACScreen} />
-          <Stack.Screen name="AddLightScreen" component={AddLightScreen} />
           <Stack.Screen name="DeleteScreen" component={DeleteScreen} />
         </Stack.Navigator>
       </NavigationContainer>
