@@ -50,7 +50,12 @@ function TVControl({ route }) {
       <Text>{tvName} Remote Controller</Text>
       {tvName === 'TV1' && (
         <View>
-          {/* TV1에 대한 고유한 UI를 여기에 추가 */}
+          <Text>{tvName} Remote Controller</Text>
+          <Button title="Power ON/OFF" onPress={() => console.log('Power Button Pressed!')} />
+          <Button title="Channel Up" onPress={() => console.log('Channel Up Button Pressed!')} />
+          <Button title="Channel Down" onPress={() => console.log('Channel Down Button Pressed!')} />
+          <Button title="Volume Up" onPress={() => console.log('Volume Up Button Pressed!')} />
+          <Button title="Volume Down" onPress={() => console.log('Volume Down Button Pressed!')} />
         </View>
       )}
       {tvName === 'TV2' && (
