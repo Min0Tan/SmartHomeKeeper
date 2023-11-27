@@ -6,6 +6,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Picker } from '@react-native-picker/picker';
 import { TVProvider, TVContext } from './TVContext';
 import { ACProvider, ACContext } from './ACContext';
+import { logEvent } from './logService';
+import { db, getDatabase } from './firebaseConfig';
 
 const Stack = createStackNavigator();
 
@@ -45,22 +47,52 @@ function TypeScreen({ navigation }) {
 function TVControl({ route }) {
   const { tvName } = route.params;
 
+  const handlePowerButtonPress = () => {
+    console.log(`${tvName} Power Button Pressed!`);
+    logEvent(db, tvName, 'Power Button Pressed');
+  };
+
+  const handleChannelUpButtonPress = () => {
+    console.log(`${tvName} Channel Up Button Pressed!`);
+    logEvent(db, tvName, 'Channel Up Button Pressed');
+  };
+
+  const handleChannelDownButtonPress = () => {
+    console.log(`${tvName} Channel Down Button Pressed!`);
+    logEvent(db, tvName, 'Channel Down Button Pressed');
+  };
+
+  const handleVolumeUpButtonPress = () => {
+    console.log(`${tvName} Volume Up Button Pressed!`);
+    logEvent(db, tvName, 'Volume Up Button Pressed');
+  };
+
+  const handleVolumeDownButtonPress = () => {
+    console.log(`${tvName} Volume Down Button Pressed!`);
+    logEvent(db, tvName, 'Volume Down Button Pressed');
+  };
+
   return (
     <View>
       <Text>{tvName} Remote Controller</Text>
       {tvName === 'TV1' && (
         <View>
           <Text>{tvName} Remote Controller</Text>
-          <Button title="Power ON/OFF" onPress={() => console.log('Power Button Pressed!')} />
-          <Button title="Channel Up" onPress={() => console.log('Channel Up Button Pressed!')} />
-          <Button title="Channel Down" onPress={() => console.log('Channel Down Button Pressed!')} />
-          <Button title="Volume Up" onPress={() => console.log('Volume Up Button Pressed!')} />
-          <Button title="Volume Down" onPress={() => console.log('Volume Down Button Pressed!')} />
+          <Button title="Power ON/OFF" onPress={handlePowerButtonPress} />
+          <Button title="Channel Up" onPress={handleChannelUpButtonPress} />
+          <Button title="Channel Down" onPress={handleChannelDownButtonPress} />
+          <Button title="Volume Up" onPress={handleVolumeUpButtonPress} />
+          <Button title="Volume Down" onPress={handleVolumeDownButtonPress} />
         </View>
       )}
       {tvName === 'TV2' && (
         <View>
-          {/* TV2에 대한 고유한 UI를 여기에 추가 */}
+          <Text>{tvName} Remote Controller</Text>
+          <Button title="Power ON/OFF" onPress={handlePowerButtonPress} />
+          <Button title="Channel Up" onPress={handleChannelUpButtonPress} />
+          <Button title="Channel Down" onPress={handleChannelDownButtonPress} />
+          <Button title="Volume Up" onPress={handleVolumeUpButtonPress} />
+          <Button title="Volume Down" onPress={handleVolumeDownButtonPress} />
         </View>
       )}
       {tvName === 'TV3' && (
@@ -72,6 +104,8 @@ function TVControl({ route }) {
     </View>
   );
 }
+
+logEvent(db, 'eventType', 'eventDetails');
 
 function ACControl({ route }) {
   const { acName } = route.params;
