@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, Button, Switch, StyleSheet, Alert, TouchableOpacity, SafeAreaView, ScrollView, Animated, AppRegistry } from 'react-native';
+import { View, Text, Button, Switch, StyleSheet, Alert, TouchableOpacity, ScrollView, Animated, AppRegistry } from 'react-native';
 import { Appbar, IconButton, MD3Colors } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -237,26 +237,6 @@ const styles = StyleSheet.create({
   },
 });
 
-class SliderExample extends React.Component {
-  state = {
-    value: 0.2
-  };
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <Slider
-          value={this.state.value}
-          onValueChange={value => this.setState({ value })}
-        />
-        <Text>
-          Value: {this.state.value}
-        </Text>
-      </View>
-    );
-  }
-}
-
 const DeviceCard = ({ device, navigation }) => {
   return (
     <View>
@@ -414,7 +394,7 @@ function Dashboard({ navigation }) {
 
   return (
     <ScrollView
-      contentContainerStyle={styles.background}
+      //contentContainerStyle={styles.background} //이거 있으면 스크롤 원위치
       keyboardShouldPersistTaps="handled" // 스크롤 시 키보드 닫기
     >
       <View style={styles.spaceContainer}></View>
