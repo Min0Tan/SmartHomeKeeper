@@ -325,8 +325,16 @@ const DeviceCard = ({ device, navigation }) => {
 const DeviceCardDelete = ({ device, navigation, onDelete }) => {
 
   const handleDelete = () => {
-    onDelete(device.name);
+    if (device && device.name) {
+      onDelete(device.name);
+    } else if (device && device.devices && device.devices.length > 0) {
+      // 장치 목록이 있을 경우 첫 번째 장치의 이름을 사용
+      onDelete(device.devices[0]);
+    } else {
+      console.error("Invalid device information:", device);
+    }
   };
+
 
   return (
     <TouchableOpacity
@@ -1165,6 +1173,7 @@ function DeleteScreen({ navigation }) {
       ]
     );
   };
+
 
   return (
     <ScrollView
