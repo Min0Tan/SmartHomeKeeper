@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, Button, Switch, StyleSheet, Alert, TouchableOpacity, ScrollView, Animated, AppRegistry } from 'react-native';
+import { View, Text, Button, Switch, StyleSheet, Alert, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { Appbar, IconButton, MD3Colors } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -8,7 +8,9 @@ import { TVProvider, TVContext } from './TVContext';
 import { ACProvider, ACContext } from './ACContext';
 import { LightProvider, LightContext } from './LightContext';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 import { logEvent } from './logService';
 import { db, getDatabase } from './firebaseConfig';
@@ -65,6 +67,14 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     marginRight: 'auto',
   },
+  modelContainer: {
+    height: 120,
+    width: 300,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+
+  },
   valueContainer: {
     height: 200,
     width: 330,
@@ -105,7 +115,7 @@ const styles = StyleSheet.create({
     width: 350,
     flexDirection: 'column',
     justifyContent: 'space-around',
-    //alignItems: 'center',
+    alignItems: 'center',
     marginVertical: 0,
     borderRadius: 16,
     shadowColor: '',
@@ -125,8 +135,8 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: 'row', // 행 방향으로 나열
     justifyContent: 'space-between', // 두 컨테이너를 행 내에서 좌우로 나눔
-    paddingHorizontal: 16, // 좌우 여백 설정
-    marginTop: 20, // 상단 여백 설정
+    paddingHorizontal: 10, // 좌우 여백 설정
+    marginTop: 15, // 상단 여백 설정
   },
   switchContainer: {
     flexDirection: 'row',
@@ -135,7 +145,7 @@ const styles = StyleSheet.create({
     height: 100,
   },
   switch: {
-    marginRight: 10,
+    //marginRight: 10,
   },
   iconContainer: {
     height: 160,
@@ -176,13 +186,14 @@ const styles = StyleSheet.create({
     width: 160,
     borderWidth: 3,
     borderColor: "white",
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'space-around',
     alignItems: 'center',
     //marginVertical: 8,
     marginTop: 0,
     marginBottom: 10,
-    marginRight: 8,
+
+    //marginRight: 8,
     backgroundColor: '#E3F3EC',
     borderRadius: 20,
   },
@@ -223,6 +234,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2, // 선의 높이
     borderBottomColor: '#C5C8C770', // 선의 색상
   },
+  verticalseparator: {
+    borderLeftWidth: 2,
+    borderLeftColor: '#C5C8C770',
+    marginTop: 6
+  },
   deviceseparator: {
     width: 350,
     borderBottomWidth: 2, // 선의 높이
@@ -238,85 +254,215 @@ const styles = StyleSheet.create({
 });
 
 const DeviceCard = ({ device, navigation }) => {
+
+  const navigateControl = (singleDevice) => {
+    if (singleDevice === 'LG LED') {
+      navigation.navigate('TVControl', { tvName: singleDevice });
+    } else if (singleDevice === 'LG Ultra LED') {
+      navigation.navigate('TVControl', { tvName: singleDevice });
+    } else if (singleDevice === 'LG OLED') {
+      navigation.navigate('TVControl', { tvName: singleDevice });
+    } else if (singleDevice === 'UHD') {
+      navigation.navigate('TVControl', { tvName: singleDevice });
+    }
+
+    else if (singleDevice === 'Whisen 4way') {
+      navigation.navigate('ACControl', { acName: singleDevice });
+    } else if (singleDevice === 'Whisen 1way') {
+      navigation.navigate('ACControl', { acName: singleDevice });
+    } else if (singleDevice === 'windfree') {
+      navigation.navigate('ACControl', { acName: singleDevice });
+    } else if (singleDevice === 'Carrier') {
+      navigation.navigate('ACControl', { acName: singleDevice });
+    }
+
+    else if (singleDevice === 'Light1') {
+      navigation.navigate('LightControl', { lightName: singleDevice });
+    } else if (singleDevice === 'Light2') {
+      navigation.navigate('LightControl', { lightName: singleDevice });
+    } else if (singleDevice === 'Light3') {
+      navigation.navigate('LightControl', { lightName: singleDevice });
+    }
+  }
+
   return (
     <View>
       {device.devices.map((singleDevice, deviceIndex) => (
 
-        <TouchableOpacity
-          key={`device_${deviceIndex}`}
-          style={styles.dashboardContainer}
-        >
-
-          {singleDevice === 'TV1' && (
-            <View alignItems='center'>
-              <Icon name="tv" size={50} color="#73E1C5" onPress={() => navigation.navigate('TVControl', { tvName: singleDevice })} />
+        <View>
+          {singleDevice === 'LG LED' && (
+            <TouchableOpacity
+              key={`device_${deviceIndex}`}
+              style={styles.dashboardContainer}
+              alignItems='center'
+              onPress={() => navigateControl(singleDevice)}>
+              <Icon name="tv" size={50} color="#C4084F" />
               <Button
-                title={`${singleDevice} `}
+                title={`LG LED`}
                 size={30}
                 color="black"
-                onPress={() => navigation.navigate('TVControl', { tvName: singleDevice })}
+                onPress={() => navigateControl(singleDevice)}
               />
-            </View>
-          )}
-          {singleDevice === 'TV2' && (
-            <View alignItems='center'>
-              <Icon name="tv" size={50} color="#73E1C5" onPress={() => navigation.navigate('TVControl', { tvName: singleDevice })} />
-              <Button
-                title={`${singleDevice} `}
-                size={30}
-                color="black"
-                onPress={() => navigation.navigate('TVControl', { tvName: singleDevice })}
-              />
-            </View>
+            </TouchableOpacity>
           )}
 
-          {singleDevice === 'AC1' && (
-            <View alignItems='center'>
-              <Icon name="microwave" size={50} color="#73E1C5" onPress={() => navigation.navigate('ACControl', { acName: singleDevice })} />
+          {singleDevice === 'LG Ultra LED' && (
+            <TouchableOpacity
+              key={`device_${deviceIndex}`}
+              style={styles.dashboardContainer}
+              alignItems='center'
+              onPress={() => navigateControl(singleDevice)}>
+              <Icon name="tv" size={50} color="#C4084F" />
               <Button
-                title={`${singleDevice} `}
+                title={`LG Ultra LED`}
+                size={30}
+                color="black"
+                onPress={() => navigateControl(singleDevice)}
+              />
+            </TouchableOpacity>
+          )}
+          {singleDevice === 'LG OLED' && (
+            <TouchableOpacity
+              key={`device_${deviceIndex}`}
+              style={styles.dashboardContainer}
+              alignItems='center'
+              onPress={() => navigateControl(singleDevice)}>
+              <Icon name="tv" size={50} color="#C4084F" />
+              <Button
+                title={`LG OLED`}
+                size={30}
+                color="black"
+                onPress={() => navigateControl(singleDevice)}
+              />
+            </TouchableOpacity>
+          )}
+          {singleDevice === 'UHD' && (
+            <TouchableOpacity
+              key={`device_${deviceIndex}`}
+              style={styles.dashboardContainer}
+              alignItems='center'
+              onPress={() => navigateControl(singleDevice)}>
+              <Icon name="tv" size={50} color="#1862B4" />
+              <Button
+                title={`Samsung UHD`}
+                size={30}
+                color="black"
+                onPress={() => navigateControl(singleDevice)}
+              />
+            </TouchableOpacity>
+          )}
+
+
+          {singleDevice === 'Whisen 4way' && (
+            <TouchableOpacity
+              key={`device_${deviceIndex}`}
+              style={styles.dashboardContainer}
+              alignItems='center'
+              onPress={() => navigateControl(singleDevice)}>
+              <MaterialCommunityIcons name="air-filter" size={45} color="#C4084F" />
+              <Button
+                title={`Whisen 4way`}
                 size={30}
                 color="black"
                 onPress={() => navigation.navigate('ACControl', { acName: singleDevice })}
               />
-            </View>
+            </TouchableOpacity>
           )}
-          {singleDevice === 'AC2' && (
-            <View alignItems='center'>
-              <Icon name="microwave" size={50} color="#73E1C5" onPress={() => navigation.navigate('ACControl', { acName: singleDevice })} />
+          {singleDevice === 'Whisen 1way' && (
+            <TouchableOpacity
+              key={`device_${deviceIndex}`}
+              style={styles.dashboardContainer}
+              alignItems='center'
+              onPress={() => navigateControl(singleDevice)}>
+              <MaterialCommunityIcons name="air-filter" size={45} color="#C4084F" />
               <Button
-                title={`${singleDevice} `}
+                title={`Whisen 1way`}
+                size={25}
+                color="black"
+                onPress={() => navigateControl(singleDevice)}
+              />
+            </TouchableOpacity>
+          )}
+          {singleDevice === 'windfree' && (
+            <TouchableOpacity
+              key={`device_${deviceIndex}`}
+              style={styles.dashboardContainer}
+              alignItems='center'
+              onPress={() => navigateControl(singleDevice)}>
+              <MaterialCommunityIcons name="air-filter" size={45} color="#1862B4" />
+              <Button
+                title={`windfree`}
                 size={30}
                 color="black"
-                onPress={() => navigation.navigate('ACControl', { acName: singleDevice })}
+                onPress={() => navigateControl(singleDevice)}
               />
-            </View>
+            </TouchableOpacity>
           )}
-          {singleDevice === 'AC3' && (
-            <View alignItems='center'>
-              <Icon name="microwave" size={50} color="#73E1C5" onPress={() => navigation.navigate('ACControl', { acName: singleDevice })} />
+          {singleDevice === 'Carrier' && (
+            <TouchableOpacity
+              key={`device_${deviceIndex}`}
+              style={styles.dashboardContainer}
+              alignItems='center'
+              onPress={() => navigateControl(singleDevice)}>
+              <MaterialCommunityIcons name="air-filter" size={45} color="#020298" />
               <Button
-                title={`${singleDevice} `}
+                title={`Carrier`}
                 size={30}
                 color="black"
-                onPress={() => navigation.navigate('ACControl', { acName: singleDevice })}
+                onPress={() => navigateControl(singleDevice)}
               />
-            </View>
+            </TouchableOpacity>
           )}
+
 
           {singleDevice === 'Light1' && (
-            <View alignItems='center'>
-              <Icon name="lightbulb-outline" size={50} color="#73E1C5" onPress={() => navigation.navigate('LightControl', { lightName: singleDevice })} />
+            <TouchableOpacity
+              key={`device_${deviceIndex}`}
+              style={styles.dashboardContainer}
+              alignItems='center'
+              onPress={() => navigateControl(singleDevice)}>
+              <Icon name="lightbulb-outline" size={50} color="#73E1C5" />
               <Button
                 title={`${singleDevice} `}
                 size={30}
                 color="black"
-                onPress={() => navigation.navigate('LightControl', { lightName: singleDevice })}
+                onPress={() => navigateControl(singleDevice)}
               />
-            </View>
+            </TouchableOpacity>
+          )}
+          {singleDevice === 'Light2' && (
+            <TouchableOpacity
+              key={`device_${deviceIndex}`}
+              style={styles.dashboardContainer}
+              alignItems='center'
+              onPress={() => navigateControl(singleDevice)}>
+              <Icon name="lightbulb-outline" size={50} color="#73E1C5" />
+              <Button
+                title={`${singleDevice} `}
+                size={30}
+                color="black"
+                onPress={() => navigateControl(singleDevice)}
+              />
+            </TouchableOpacity>
+          )}
+          {singleDevice === 'Light3' && (
+            <TouchableOpacity
+              key={`device_${deviceIndex}`}
+              style={styles.dashboardContainer}
+              alignItems='center'
+              onPress={() => navigateControl(singleDevice)}>
+              <Icon name="lightbulb-outline" size={50} color="#73E1C5" />
+              <Button
+                title={`${singleDevice} `}
+                size={30}
+                color="black"
+                onPress={() => navigateControl(singleDevice)}
+              />
+            </TouchableOpacity>
           )}
 
-        </TouchableOpacity>
+
+        </View>
       ))}
     </View>
   );
@@ -325,72 +471,235 @@ const DeviceCard = ({ device, navigation }) => {
 const DeviceCardDelete = ({ device, navigation, onDelete }) => {
 
   const handleDelete = () => {
-    if (device && device.name) {
-      onDelete(device.name);
-    } else if (device && device.devices && device.devices.length > 0) {
+    if (device && device.devices) {
       // 장치 목록이 있을 경우 첫 번째 장치의 이름을 사용
-      onDelete(device.devices[0]);
+      onDelete(device.name);
     } else {
       console.error("Invalid device information:", device);
     }
   };
 
-
   return (
-    <TouchableOpacity
-      style={styles.dashboardContainer}
-      onPress={handleDelete}
-    >
+    <View>
       {device.devices.map((singleDevice, deviceIndex) => (
-        <View key={`device_${deviceIndex}`} alignItems='center'>
-          {singleDevice === 'TV1' && (
-            <Fragment>
-              <Icon name="tv" size={50} color="#73E1C5" onPress={() => navigation.navigate('TVControl', { tvName: singleDevice })} />
-              <Button title={`${singleDevice} `} size={30} color="black" onPress={handleDelete} />
-            </Fragment>
+
+        <View>
+          {singleDevice === 'LG LED' && (
+            <TouchableOpacity
+              key={`device_${deviceIndex}`}
+              style={styles.dashboardContainer}
+              alignItems='center'
+              onPress={handleDelete}>
+              <Icon name="tv" size={50} color="#C4084F" />
+              <Button
+                title={`LG LED`}
+                size={30}
+                color="black"
+                onPress={handleDelete}
+              />
+            </TouchableOpacity>
           )}
-          {singleDevice === 'TV2' && (
-            <Fragment>
-              <Icon name="tv" size={50} color="#73E1C5" onPress={() => navigation.navigate('TVControl', { tvName: singleDevice })} />
-              <Button title={`${singleDevice} `} size={30} color="black" onPress={handleDelete} />
-            </Fragment>
+
+          {singleDevice === 'LG Ultra LED' && (
+            <TouchableOpacity
+              key={`device_${deviceIndex}`}
+              style={styles.dashboardContainer}
+              alignItems='center'
+              onPress={handleDelete}>
+              <Icon name="tv" size={50} color="#C4084F"
+                onPress={handleDelete} />
+              <Button
+                title={`LG Ultra LED`}
+                size={30}
+                color="black"
+                onPress={handleDelete}
+              />
+            </TouchableOpacity>
           )}
-          {singleDevice === 'AC1' && (
-            <Fragment>
-              <Icon name="microwave" size={50} color="#73E1C5" onPress={() => navigation.navigate('ACControl', { acName: singleDevice })} />
-              <Button title={`${singleDevice} `} size={30} color="black" onPress={handleDelete} />
-            </Fragment>
+
+          {singleDevice === 'LG OLED' && (
+            <TouchableOpacity
+              key={`device_${deviceIndex}`}
+              style={styles.dashboardContainer}
+              alignItems='center'
+              onPress={handleDelete}>
+              <Icon name="tv" size={50} color="#C4084F"
+                onPress={handleDelete} />
+              <Button
+                title={`LG OLED`}
+                size={30}
+                color="black"
+                onPress={handleDelete}
+              />
+            </TouchableOpacity>
           )}
-          {singleDevice === 'AC2' && (
-            <Fragment>
-              <Icon name="microwave" size={50} color="#73E1C5" onPress={() => navigation.navigate('ACControl', { acName: singleDevice })} />
-              <Button title={`${singleDevice} `} size={30} color="black" onPress={handleDelete} />
-            </Fragment>
+
+          {singleDevice === 'UHD' && (
+            <TouchableOpacity
+              key={`device_${deviceIndex}`}
+              style={styles.dashboardContainer}
+              alignItems='center'
+              onPress={handleDelete}>
+              <Icon name="tv" size={50} color="#1862B4"
+                onPress={handleDelete} />
+              <Button
+                title={`Samsung UHD`}
+                size={30}
+                color="black"
+                onPress={handleDelete}
+              />
+            </TouchableOpacity>
           )}
-          {singleDevice === 'AC3' && (
-            <Fragment>
-              <Icon name="microwave" size={50} color="#73E1C5" onPress={() => navigation.navigate('ACControl', { acName: singleDevice })} />
-              <Button title={`${singleDevice} `} size={30} color="black" onPress={handleDelete} />
-            </Fragment>
+
+          {singleDevice === 'Whisen 4way' && (
+            <TouchableOpacity
+              key={`device_${deviceIndex}`}
+              style={styles.dashboardContainer}
+              alignItems='center'
+              onPress={handleDelete}>
+              <MaterialCommunityIcons name="air-filter" size={45} color="#C4084F" />
+              <Button
+                title={`Whisen 4way`}
+                size={30}
+                color="black"
+                onPress={handleDelete}
+              />
+            </TouchableOpacity>
           )}
+          {singleDevice === 'Whisen 1way' && (
+            <TouchableOpacity
+              key={`device_${deviceIndex}`}
+              style={styles.dashboardContainer}
+              alignItems='center'
+              onPress={handleDelete}>
+              <MaterialCommunityIcons name="air-filter" size={45} color="#C4084F" />
+              <Button
+                title={`Whisen 1way`}
+                size={25}
+                color="black"
+                onPress={handleDelete}
+              />
+            </TouchableOpacity>
+          )}
+          {singleDevice === 'windfree' && (
+            <TouchableOpacity
+              key={`device_${deviceIndex}`}
+              style={styles.dashboardContainer}
+              alignItems='center'
+              onPress={handleDelete}>
+              <MaterialCommunityIcons name="air-filter" size={45} color="#1862B4" />
+              <Button
+                title={`windfree`}
+                size={30}
+                color="black"
+                onPress={handleDelete}
+              />
+            </TouchableOpacity>
+          )}
+          {singleDevice === 'Carrier' && (
+            <TouchableOpacity
+              key={`device_${deviceIndex}`}
+              style={styles.dashboardContainer}
+              alignItems='center'
+              onPress={handleDelete}>
+              <MaterialCommunityIcons name="air-filter" size={45} color="#020298" />
+              <Button
+                title={`Carrier`}
+                size={30}
+                color="black"
+                onPress={handleDelete}
+              />
+            </TouchableOpacity>
+          )}
+
           {singleDevice === 'Light1' && (
-            <Fragment>
-              <Icon name="lightbulb-outline" size={50} color="#73E1C5" onPress={() => navigation.navigate('LightControl', { lightName: singleDevice })} />
-              <Button title={`${singleDevice} `} size={30} color="black" onPress={handleDelete} />
-            </Fragment>
+            <TouchableOpacity
+              key={`device_${deviceIndex}`}
+              style={styles.dashboardContainer}
+              alignItems='center'
+              onPress={handleDelete}>
+              <Icon name="lightbulb-outline" size={50} color="#73E1C5" />
+              <Button
+                title={`${singleDevice} `}
+                size={30}
+                color="black"
+                onPress={handleDelete}
+              />
+            </TouchableOpacity>
           )}
+          {singleDevice === 'Light2' && (
+            <TouchableOpacity
+              key={`device_${deviceIndex}`}
+              style={styles.dashboardContainer}
+              alignItems='center'
+              onPress={handleDelete}>
+              <Icon name="lightbulb-outline" size={50} color="#73E1C5" />
+              <Button
+                title={`${singleDevice} `}
+                size={30}
+                color="black"
+                onPress={handleDelete}
+              />
+            </TouchableOpacity>
+          )}
+          {singleDevice === 'Light3' && (
+            <TouchableOpacity
+              key={`device_${deviceIndex}`}
+              style={styles.dashboardContainer}
+              alignItems='center'
+              onPress={handleDelete}>
+              <Icon name="lightbulb-outline" size={50} color="#73E1C5" />
+              <Button
+                title={`${singleDevice} `}
+                size={30}
+                color="black"
+                onPress={handleDelete}
+              />
+            </TouchableOpacity>
+          )}
+
+
         </View>
       ))}
-    </TouchableOpacity>
+    </View>
   );
 };
+
+function LoginScreen({ navigation }) {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = () => {
+    Alert.alert('Logged in', `Welcome, ${username}!`);
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Login</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Username"
+        value={username}
+        onChangeText={setUsername}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
+      <Button title="Log in" onPress={handleLogin} />
+    </View>
+  );
+}
 
 function Dashboard({ navigation }) {
   const { tvs } = useContext(TVContext);
   const { acs } = useContext(ACContext);
   const { lights } = useContext(LightContext);
 
-  //const groupedDevices = groupDevicesByRow([tvs, acs, lights]);
+  // const groupedDevices = groupDevicesByRow([tvs, acs, lights]);
   // 각 섹션에 속하는 디바이스들로 그룹화
   const groupedTvs = tvs.length > 0 ? groupDevicesByRow([tvs]) : [];
   const groupedAcs = acs.length > 0 ? groupDevicesByRow([acs]) : [];
@@ -403,16 +712,18 @@ function Dashboard({ navigation }) {
   return (
     <ScrollView
       //contentContainerStyle={styles.background} //이거 있으면 스크롤 원위치
+      style={styles.background}
       keyboardShouldPersistTaps="handled" // 스크롤 시 키보드 닫기
     >
       <View style={styles.spaceContainer}></View>
+
 
       {/* TV 섹션 */}
       {groupedTvs.length > 0 && (
         <View style={[styles.deviceContainer, { backgroundColor: '#E6FAF5' }]}>
           <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 13, marginBottom: 5 }}>
 
-            <Text style={styles.sectionTitle}>  Television                                       </Text>
+            <Text style={styles.sectionTitle}>  Television                                          </Text>
             <Icon
               name={isTvsOpen ? 'keyboard-arrow-up' : 'keyboard-arrow-down'}
               size={30}
@@ -447,7 +758,7 @@ function Dashboard({ navigation }) {
         <View style={[styles.deviceContainer, { backgroundColor: '#E6FAF5' }]}>
           <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 13, marginBottom: 5 }}>
 
-            <Text style={styles.sectionTitle}>  Air Conditioner                              </Text>
+            <Text style={styles.sectionTitle}>  Air Conditioner                                </Text>
             <Icon
               name={isAcsOpen ? 'keyboard-arrow-up' : 'keyboard-arrow-down'}
               size={30}
@@ -480,7 +791,7 @@ function Dashboard({ navigation }) {
       {groupedLights.length > 0 && (
         <View style={[styles.deviceContainer, { backgroundColor: '#E6FAF5' }]}>
           <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 13, marginBottom: 5 }}>
-            <Text style={styles.sectionTitle}>  Lights                                                </Text>
+            <Text style={styles.sectionTitle}>  Lights                                                  </Text>
             <Icon
               name={isLightsOpen ? 'keyboard-arrow-up' : 'keyboard-arrow-down'}
               size={30}
@@ -507,6 +818,8 @@ function Dashboard({ navigation }) {
           )}
         </View>
       )}
+      <View style={styles.spaceContainer}></View>
+      <View style={styles.spaceContainer}></View>
     </ScrollView>
   );
 }
@@ -532,48 +845,90 @@ function TypeScreen({ navigation }) {
   return (
     <View style={styles.background}>
       <View style={styles.spaceContainer}></View>
+      <View style={styles.spaceContainer}></View>
 
-      <View style={[styles.typeContainer, { justifyContent: 'center' }]}>
+      <TouchableOpacity style={[styles.typeContainer, { justifyContent: 'center' }]} onPress={() => navigation.navigate('AddTVScreen')}>
         <Icon name="airplay" size={60} color="#73E1C5" />
         <Button title="TV" color="#366A55" onPress={() => navigation.navigate('AddTVScreen')} />
-      </View>
+      </TouchableOpacity>
 
       <View style={styles.spaceContainer}></View>
+      <View style={styles.spaceContainer}></View>
 
-      <View style={[styles.typeContainer, { justifyContent: 'center' }]}>
-        <Icon name="microwave" size={60} color="#73E1C5" />
+      <TouchableOpacity style={[styles.typeContainer, { justifyContent: 'center' }]} onPress={() => navigation.navigate('AddACScreen')}>
+
+        <MaterialCommunityIcons name="air-filter" size={60} color="#73E1C5" />
         <Button title="AC" color="#366A55" onPress={() => navigation.navigate('AddACScreen')} />
-      </View>
+      </TouchableOpacity>
 
       <View style={styles.spaceContainer}></View>
+      <View style={styles.spaceContainer}></View>
 
-      <View style={[styles.typeContainer, { justifyContent: 'center' }]}>
+      <TouchableOpacity style={[styles.typeContainer, { justifyContent: 'center' }]} onPress={() => navigation.navigate('AddLightScreen')}>
         <Icon name="lightbulb-outline" size={60} color="#73E1C5" />
         <Button title="Light" color="#366A55" onPress={() => navigation.navigate('AddLightScreen')} />
-      </View>
+      </TouchableOpacity>
     </View>
   );
 }
 
 function AddTVScreen() {
+
   const { tvs, setTVs } = useContext(TVContext);
   const [selectedValue, setSelectedValue] = useState('TV1');
+  const [pickerItems, setPickerItems] = useState([
+    { label: '-', value: '' },
+    { label: '-', value: '' },
+    { label: '-', value: '' },
+  ]);
+
   const handleComplete = () => {
     setTVs([...tvs, selectedValue]);
-    Alert.alert(`${selectedValue}  등록이 완료되었습니다.`);
+    Alert.alert(`${selectedValue} 등록이 완료되었습니다.`);
+  };
+
+  const handleIconPress = (items) => {
+    setPickerItems(items);
+    setSelectedValue(items[0].value);
   };
 
   return (
     <View style={styles.background}>
+      <View style={styles.spaceContainer}></View>
+
+      <Text style={[styles.textBold, { marginLeft: 20 }]}>Select Brand</Text>
+      <View style={[styles.modelContainer, { alignSelf: 'center' }]}>
+        <TouchableOpacity onPress={() => handleIconPress([
+          { label: '< LG LED >', value: 'LG LED' },
+          { label: '< LG Ultra LED >', value: 'LG Ultra LED' },
+          { label: '< LG OLED >', value: 'LG OLED' },
+        ])}>
+          <Image source={require('./assets/LG_symbol.png')} style={{ width: 55, height: 55 }} />
+        </TouchableOpacity>
+        <TouchableOpacity style={{ alignSelf: 'center' }}
+          onPress={() => handleIconPress([
+            { label: '< Samsung UHD >', value: 'UHD' }])}>
+          <Image source={require('./assets/samsung.png')} style={{ width: 105, height: 35 }} />
+        </TouchableOpacity>
+
+      </View>
+
+      <View style={[styles.separator, { alignSelf: 'center', width: 340 }]}></View>
+      <Text style={[styles.textBold, { marginTop: 20, marginLeft: 20 }]}>Select Line</Text>
       <Picker
         selectedValue={selectedValue}
         onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
       >
-        <Picker.Item label="TV1" value="TV1" />
-        <Picker.Item label="TV2" value="TV2" />
-        <Picker.Item label="TV3" value="TV3" />
+        {pickerItems.map((item, index) => (
+          <Picker.Item key={index} label={item.label} value={item.value} />
+        ))}
       </Picker>
-      <Button title="추가" color="#73E1C5" onPress={handleComplete} />
+      <View style={styles.spaceContainer}></View>
+      <View style={{ width: 100, height: 40, borderWidth: 2, backgroundColor: "#E5F4F0", borderRadius: 30, borderColor: "white", alignSelf: 'center', }}>
+        <Button title="추가" color="#63C7AE" onPress={handleComplete} />
+      </View>
+
+
     </View>
   );
 }
@@ -581,23 +936,63 @@ function AddTVScreen() {
 function AddACScreen() {
   const { acs, setACs } = useContext(ACContext);
   const [selectedValue, setSelectedValue] = useState('AC1');
+  const [pickerItems, setPickerItems] = useState([
+    { label: '-', value: 'a' },
+    { label: '-', value: 'b' },
+    { label: '-', value: 'c' },
+  ]);
 
   const handleComplete = () => {
     setACs([...acs, selectedValue]);
-    Alert.alert(`${selectedValue}  등록이 완료되었습니다.`);
+    Alert.alert(`${selectedValue} 등록이 완료되었습니다.`);
+  };
+
+  const handleIconPress = (items) => {
+    setPickerItems(items);
+    setSelectedValue(items[0].value);
   };
 
   return (
     <View style={styles.background}>
+      <View style={styles.spaceContainer}></View>
+
+      <Text style={[styles.textBold, { marginLeft: 20 }]}>Select Brand</Text>
+      <View style={[styles.modelContainer, { alignSelf: 'center' }]}>
+        <TouchableOpacity onPress={() => handleIconPress([
+          { label: 'Whisen -4way-', value: 'Whisen 4way' },
+          { label: 'Whisen -1way-', value: 'Whisen 1way' },
+        ])}>
+          <Image source={require('./assets/LG_symbol.png')} style={{ width: 55, height: 55 }} />
+        </TouchableOpacity>
+        <TouchableOpacity style={{ alignSelf: 'center' }}
+          onPress={() => handleIconPress([
+            { label: '< BESPOKE windfree >', value: 'windfree' },
+          ])}>
+          <Image source={require('./assets/samsung.png')} style={{ width: 105, height: 35 }} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleIconPress([
+          { label: '< Carrier Inverter >', value: 'Carrier' },
+        ])}>
+          <Image source={require('./assets/Carrier.png')} style={{ width: 95, height: 37 }} />
+        </TouchableOpacity>
+      </View>
+
+      <View style={[styles.separator, { alignSelf: 'center', width: 340 }]}></View>
+      <Text style={[styles.textBold, { marginTop: 20, marginLeft: 20 }]}>Select Line</Text>
       <Picker
         selectedValue={selectedValue}
         onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
       >
-        <Picker.Item label="AC1" value="AC1" />
-        <Picker.Item label="AC2" value="AC2" />
-        <Picker.Item label="AC3" value="AC3" />
+        {pickerItems.map((item, index) => (
+          <Picker.Item key={index} label={item.label} value={item.value} />
+        ))}
       </Picker>
-      <Button title="추가" color="#73E1C5" onPress={handleComplete} />
+
+      <View style={styles.spaceContainer}></View>
+      <View style={{ width: 100, height: 40, borderWidth: 2, backgroundColor: "#E5F4F0", borderRadius: 30, borderColor: "white", alignSelf: 'center', }}>
+        <Button title="추가" color="#63C7AE" onPress={handleComplete} />
+      </View>
+
     </View>
   );
 }
@@ -621,35 +1016,10 @@ function AddLightScreen() {
         <Picker.Item label="Light2" value="Light2" />
         <Picker.Item label="Light3" value="Light3" />
       </Picker>
-      <Button title="추가" color="#73E1C5" onPress={handleComplete} />
-    </View>
-  );
-}
-
-function AddScreen({ navigation }) {
-  const { tvs, setTVs } = useContext(TVContext);
-  const [selectedValue, setSelectedValue] = useState('TV1');
-
-  const handleComplete = () => {
-    setTVs([...tvs, selectedValue]);
-    Alert.alert(`${selectedValue}  등록이 완료되었습니다.`);
-  };
-
-  return (
-    <View>
-      <Appbar.Header>
-        <Appbar.Action icon="chevron-double-left" color="#60F0CB" onPress={() => navigation.navigate("Dashboard")} />
-        <Appbar.Content title="Add Screen" style={{ alignItems: 'center' }} />
-      </Appbar.Header>
-      <Picker
-        selectedValue={selectedValue}
-        onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-      >
-        <Picker.Item label="TV1" value="TV1" />
-        <Picker.Item label="TV2" value="TV2" />
-        <Picker.Item label="TV3" value="TV3" />
-      </Picker>
-      <Button title="추가" color="#60F0CB" onPress={handleComplete} />
+      <View style={styles.spaceContainer}></View>
+      <View style={{ width: 100, height: 40, borderWidth: 2, backgroundColor: "#E5F4F0", borderRadius: 30, borderColor: "white", alignSelf: 'center', }}>
+        <Button title="추가" color="#63C7AE" onPress={handleComplete} />
+      </View>
     </View>
   );
 }
@@ -662,7 +1032,7 @@ function TVControl({ route }) {
   // 전원, 볼륨, 채널 업/다운 동작 수행
   const handlePowerButtonPress = () => {
     console.log(`${tvName} Power Button Pressed!`);
-    logEvent(db, tvName, 'Power Button Pressed');
+    logEvent(db, tvName, 1111);
   };
   const handleVolumeUp = () => {
     const newValue = range + 1; // 새로운 값 계산
@@ -684,8 +1054,6 @@ function TVControl({ route }) {
     console.log(`${tvName} Channel Down!`);
     logEvent(db, tvName, 'Channel Down!');
   };
-
-
   const handleVolumeChange = (value) => {
     if (value > range) {
       console.log(tvName, 'Volume Up - New value:', value);
@@ -702,9 +1070,9 @@ function TVControl({ route }) {
   return (
 
     <View style={styles.background}>
-      <View style={[styles.spaceContainer, { marginVertical: 10 }, { justifyContent: 'center' }]}></View>
+      <View style={[styles.spaceContainer, { height: 15 }, { justifyContent: 'center' }]}></View>
 
-      {tvName === 'TV1' && (
+      {tvName === 'LG LED' && (
         <View>
           <TouchableOpacity
             style={[styles.powerContainer, { justifyContent: 'center' }, { backgroundColor: '#E6FAF5' }]}
@@ -716,7 +1084,7 @@ function TVControl({ route }) {
 
           <View style={[styles.TVvalueContainer, { justifyContent: 'center' }, { backgroundColor: '#E6FAF5' }, { height: 200 }]}>
 
-            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 15 }}>
               <Text style={[styles.textBold]}>Volume                                               </Text>
             </View>
 
@@ -749,77 +1117,229 @@ function TVControl({ route }) {
 
           </View>
 
-          <View style={[styles.spaceContainer, { justifyContent: 'center' }]}></View>
+          <View style={[styles.spaceContainer, { justifyContent: 'center' }, { height: 20 }]}></View>
 
-          <View style={[styles.TVvalueContainer, { justifyContent: 'center' }, { backgroundColor: '#E6FAF5' }]}>
-            <Text style={[styles.textBold]}>Channel                                              </Text>
+          <View style={[styles.TVvalueContainer, { justifyContent: 'center' }, { backgroundColor: '#E6FAF5' }, { height: 125 }]}>
+            <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 15 }}>
+              <Text style={[styles.textBold]}>Channel                                               </Text>
+            </View>
+
             <View style={styles.separator}></View>
 
             <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 8 }}>
-              <Icon name="keyboard-arrow-up" size={30} color="#8EBEAA" onPress={handleChannelUp} />
-              <Icon name="keyboard-arrow-down" size={30} color="#8EBEAA" onPress={handleChannelDown} />
+              <Icon name="keyboard-arrow-up" size={45} color="#8EBEAA" onPress={handleChannelUp} />
+              <Icon name="keyboard-arrow-down" size={45} color="#8EBEAA" onPress={handleChannelDown} />
             </View>
           </View>
         </View>
       )}
-      {tvName === 'TV2' && (
+      {tvName === 'LG Ultra LED' && (
         <View>
-          <View style={[styles.powerContainer, { justifyContent: 'center' }, { backgroundColor: '#E6FAF5' }]}>
-            <IconButton icon="power" size={45} color="#000" onPress={handlePowerButtonPress} />
-          </View>
+          <TouchableOpacity
+            style={[styles.powerContainer, { justifyContent: 'center' }, { backgroundColor: '#E6FAF5' }]}
+            onPress={handlePowerButtonPress}>
+            <Icon name="power-settings-new" size={45} color="#648E7E" />
+          </TouchableOpacity>
+          <View style={[styles.spaceContainer, { marginVertical: 20 }, { justifyContent: 'center' }]}></View>
 
-          <View style={[styles.spaceContainer, { justifyContent: 'center' }]}>
-          </View>
 
-          <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-            <View style={[styles.iconContainer, { backgroundColor: 'white' }, { marginRight: 5 }]}>
-              <IconButton icon="volume-high" size={40} color="#60F0CB" />
-              <IconButton icon="plus-circle-outline" size={30} color="#000" onPress={handleVolumeUp} />
-              <IconButton icon="minus-circle-outline" size={30} color="#000" onPress={handleVolumeDown} />
+          <View style={[styles.TVvalueContainer, { justifyContent: 'center' }, { backgroundColor: '#E6FAF5' }, { height: 200 }]}>
+
+            <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 15 }}>
+              <Text style={[styles.textBold]}>Volume                                               </Text>
             </View>
 
-            <View style={[styles.iconContainer, { backgroundColor: 'white' }, { marginLeft: 5 }]}>
-              <IconButton icon="television" size={40} color="#60F0CB" />
-              <IconButton icon="chevron-up-circle-outline" size={30} color="#000" onPress={handleChannelUp} />
-              <IconButton icon="chevron-down-circle-outline" size={30} color="#000" onPress={handleChannelDown} />
+            <View style={styles.separator}></View>
+
+            <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10 }}>
+              <TouchableOpacity onPress={handleVolumeDown}>
+                <Icon name="volume-down" size={30} color="#85B09E" />
+              </TouchableOpacity>
+              <Text>                                                              </Text>
+              <TouchableOpacity onPress={handleVolumeUp}>
+                <Icon name="volume-up" size={30} color="#85B09E" />
+              </TouchableOpacity>
+            </View>
+
+            <Slider
+              style={{ height: 40, width: 290, marginTop: 0, marginBottom: 5 }}
+              value={range} // == this.state.value
+              onValueChange={handleVolumeChange} // 슬라이더를 움질일때 출력값 변환
+              minimumValue={1} // 최소값 설정
+              maximumValue={20} // 최대값 설정
+              maximumTrackTintColor='#8EBEAA' // 값이 크면 빨간색
+              minimumTrackTintColor='white' // 값이 작으면 파란색
+              step={1} // 1단위로 값이 변경 
+            />
+
+            <Text style={[styles.textBold2, { color: '#85B09E' }, { justifyContent: 'center' }]}>
+              {String(range)} {/* range 변수를 문자열로 변환 */}
+            </Text>
+
+          </View>
+
+          <View style={[styles.spaceContainer, { justifyContent: 'center' }, { height: 10 }]}></View>
+
+          <View style={[styles.TVvalueContainer, { justifyContent: 'center' }, { backgroundColor: '#E6FAF5' }, { height: 125 }]}>
+            <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 15 }}>
+              <Text style={[styles.textBold]}>Channel                                               </Text>
+            </View>
+
+            <View style={styles.separator}></View>
+
+            <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 8 }}>
+              <Icon name="keyboard-arrow-up" size={45} color="#8EBEAA" onPress={handleChannelUp} />
+              <Icon name="keyboard-arrow-down" size={45} color="#8EBEAA" onPress={handleChannelDown} />
             </View>
           </View>
         </View>
       )}
-      {tvName === 'TV3' && (
+      {tvName === ' LG OLED' && (
         <View>
-          <View style={[styles.powerContainer, { justifyContent: 'center' }, { backgroundColor: '#E6FAF5' }]}>
-            <IconButton icon="power" size={45} color="#000" onPress={handlePowerButtonPress} />
-          </View>
+          <TouchableOpacity
+            style={[styles.powerContainer, { justifyContent: 'center' }, { backgroundColor: '#E6FAF5' }]}
+            onPress={handlePowerButtonPress}>
+            <Icon name="power-settings-new" size={45} color="#648E7E" />
+          </TouchableOpacity>
+          <View style={[styles.spaceContainer, { marginVertical: 20 }, { justifyContent: 'center' }]}></View>
 
-          <View style={[styles.spaceContainer, { justifyContent: 'center' }]}>
-          </View>
 
-          <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-            <View style={[styles.iconContainer, { backgroundColor: 'white' }, { marginRight: 5 }]}>
-              <IconButton icon="volume-high" size={40} color="#60F0CB" />
-              <IconButton icon="plus-circle-outline" size={30} color="#000" onPress={handleVolumeUp} />
-              <IconButton icon="minus-circle-outline" size={30} color="#000" onPress={handleVolumeDown} />
+          <View style={[styles.TVvalueContainer, { justifyContent: 'center' }, { backgroundColor: '#E6FAF5' }, { height: 200 }]}>
+
+            <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 15 }}>
+              <Text style={[styles.textBold]}>Volume                                               </Text>
             </View>
 
-            <View style={[styles.iconContainer, { backgroundColor: 'white' }, { marginLeft: 5 }]}>
-              <IconButton icon="television" size={40} color="#60F0CB" />
-              <IconButton icon="chevron-up-circle-outline" size={30} color="#000" onPress={handleChannelUp} />
-              <IconButton icon="chevron-down-circle-outline" size={30} color="#000" onPress={handleChannelDown} />
+            <View style={styles.separator}></View>
+
+            <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10 }}>
+              <TouchableOpacity onPress={handleVolumeDown}>
+                <Icon name="volume-down" size={30} color="#85B09E" />
+              </TouchableOpacity>
+              <Text>                                                              </Text>
+              <TouchableOpacity onPress={handleVolumeUp}>
+                <Icon name="volume-up" size={30} color="#85B09E" />
+              </TouchableOpacity>
+            </View>
+
+            <Slider
+              style={{ height: 40, width: 290, marginTop: 0, marginBottom: 5 }}
+              value={range} // == this.state.value
+              onValueChange={handleVolumeChange} // 슬라이더를 움질일때 출력값 변환
+              minimumValue={1} // 최소값 설정
+              maximumValue={20} // 최대값 설정
+              maximumTrackTintColor='#8EBEAA' // 값이 크면 빨간색
+              minimumTrackTintColor='white' // 값이 작으면 파란색
+              step={1} // 1단위로 값이 변경 
+            />
+
+            <Text style={[styles.textBold2, { color: '#85B09E' }, { justifyContent: 'center' }]}>
+              {String(range)} {/* range 변수를 문자열로 변환 */}
+            </Text>
+
+          </View>
+
+          <View style={[styles.spaceContainer, { justifyContent: 'center' }, { height: 10 }]}></View>
+
+          <View style={[styles.TVvalueContainer, { justifyContent: 'center' }, { backgroundColor: '#E6FAF5' }, { height: 125 }]}>
+            <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 15 }}>
+              <Text style={[styles.textBold]}>Channel                                               </Text>
+            </View>
+
+            <View style={styles.separator}></View>
+
+            <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 8 }}>
+              <Icon name="keyboard-arrow-up" size={45} color="#8EBEAA" onPress={handleChannelUp} />
+              <Icon name="keyboard-arrow-down" size={45} color="#8EBEAA" onPress={handleChannelDown} />
             </View>
           </View>
         </View>
       )}
-      {/* ... */}
+      {tvName === ' UHD' && (
+        <View>
+          <TouchableOpacity
+            style={[styles.powerContainer, { justifyContent: 'center' }, { backgroundColor: '#E6FAF5' }]}
+            onPress={handlePowerButtonPress}>
+            <Icon name="power-settings-new" size={45} color="#648E7E" />
+          </TouchableOpacity>
+          <View style={[styles.spaceContainer, { marginVertical: 20 }, { justifyContent: 'center' }]}></View>
+
+
+          <View style={[styles.TVvalueContainer, { justifyContent: 'center' }, { backgroundColor: '#E6FAF5' }, { height: 200 }]}>
+
+            <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 15 }}>
+              <Text style={[styles.textBold]}>Volume                                               </Text>
+            </View>
+
+            <View style={styles.separator}></View>
+
+            <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10 }}>
+              <TouchableOpacity onPress={handleVolumeDown}>
+                <Icon name="volume-down" size={30} color="#85B09E" />
+              </TouchableOpacity>
+              <Text>                                                              </Text>
+              <TouchableOpacity onPress={handleVolumeUp}>
+                <Icon name="volume-up" size={30} color="#85B09E" />
+              </TouchableOpacity>
+            </View>
+
+            <Slider
+              style={{ height: 40, width: 290, marginTop: 0, marginBottom: 5 }}
+              value={range} // == this.state.value
+              onValueChange={handleVolumeChange} // 슬라이더를 움질일때 출력값 변환
+              minimumValue={1} // 최소값 설정
+              maximumValue={20} // 최대값 설정
+              maximumTrackTintColor='#8EBEAA' // 값이 크면 빨간색
+              minimumTrackTintColor='white' // 값이 작으면 파란색
+              step={1} // 1단위로 값이 변경 
+            />
+
+            <Text style={[styles.textBold2, { color: '#85B09E' }, { justifyContent: 'center' }]}>
+              {String(range)} {/* range 변수를 문자열로 변환 */}
+            </Text>
+
+          </View>
+
+          <View style={[styles.spaceContainer, { justifyContent: 'center' }, { height: 10 }]}></View>
+
+          <View style={[styles.TVvalueContainer, { justifyContent: 'center' }, { backgroundColor: '#E6FAF5' }, { height: 125 }]}>
+            <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 15 }}>
+              <Text style={[styles.textBold]}>Channel                                               </Text>
+            </View>
+
+            <View style={styles.separator}></View>
+
+            <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 8 }}>
+              <Icon name="keyboard-arrow-up" size={45} color="#8EBEAA" onPress={handleChannelUp} />
+              <Icon name="keyboard-arrow-down" size={45} color="#8EBEAA" onPress={handleChannelDown} />
+            </View>
+          </View>
+        </View>
+      )}
     </View>
   );
 }
 
 function ACControl({ route }) {
   const { acName } = route.params;
-  const [isSwitchOn, setSwitchOn] = useState(false);
+  const [isPowerOn, setPowerOn] = useState(false);
+  const [isDehumidifyingModeOn, setDehumidifyingModeOn] = useState(false);
+  const [isCoolingModeOn, setCoolingModeOn] = useState(false);
 
   const [range, setRange] = useState(24); // 초기값 설정
+
+  const handlePower = () => {
+    setPowerOn(prevState => {
+      const nextPowerState = !prevState;
+      if (nextPowerState) {
+        console.log(acName, 'Power On!');
+        logEvent(db, acName, 111);
+      } else {
+        console.log(acName, 'Power Off!');
+      }
+      return nextPowerState;
+    });
+  };
 
   const handleTempUp = (value) => {
     const newValue = range + 1; // 새로운 값 계산
@@ -833,7 +1353,6 @@ function ACControl({ route }) {
     logEvent(db, acName, newValue);
     setRange(newValue);
   };
-
   const handleTempChange = (value) => {
     if (value > range) {
       console.log('Temperature Up - New value:', value);
@@ -847,16 +1366,27 @@ function ACControl({ route }) {
     setRange(value);
   };
 
-  const handleModeToggle = () => {
-    setSwitchOn(!isSwitchOn);
-    if (isSwitchOn) {
-      console.log('Mode Button Pressed!');
+  const handleDehumidifyingModeToggle = () => {
+    setDehumidifyingModeOn(prevState => !prevState);
+    if (!isDehumidifyingModeOn) {
+      console.log('Dehumidifying Mode On!');
       logEvent(db, acName, 11);
+    } else {
+      console.log('Dehumidifying Mode Off!');
+      // logEvent(db, acName, 13); // off 상태에 대한 새로운 이벤트 코드를 사용하세요.
     }
-    else {
-      console.log('Mode Button Pressed!');
+    setCoolingModeOn(false);
+  };
+  const handleCoolingModeToggle = () => {
+    setCoolingModeOn(prevState => !prevState);
+    if (!isCoolingModeOn) {
+      console.log('Cooling Mode On!');
       logEvent(db, acName, 12);
+    } else {
+      console.log('Cooling Mode Off!');
+      // logEvent(db, acName, 14); // off 상태에 대한 새로운 이벤트 코드를 사용하세요.
     }
+    setDehumidifyingModeOn(false);
   };
 
   return (
@@ -864,34 +1394,44 @@ function ACControl({ route }) {
 
       <View style={[styles.spaceContainer, { marginVertical: 15 }, { justifyContent: 'center' }]}></View>
 
-      {acName === 'AC1' && (
+      {acName === 'Whisen 4way' && (
         <View>
           <TouchableOpacity
             style={[styles.powerContainer, { justifyContent: 'center' }, { backgroundColor: '#E6FAF5' }]}
-            onPress={() => {
-              console.log(acName, 'Power Button Pressed!');
-              logEvent(db, acName, 111);
-            }}>
+            onPress={handlePower}>
             <Icon name="power-settings-new" size={45} color="#648E7E" />
           </TouchableOpacity>
           <View style={[styles.spaceContainer, { marginVertical: 20 }, { justifyContent: 'center' }]}></View>
 
-          <View style={[styles.valueContainer, { justifyContent: 'center' }, { backgroundColor: '#E6FAF5' }]}>
+          <View style={[styles.valueContainer, { justifyContent: 'center' }, { backgroundColor: '#E6FAF5' }, { height: 170 }]}>
 
             <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 8 }}>
-              <Text style={[styles.textBold]}>temperature                              </Text>
-              <Icon name="device-thermostat" size={35} color="#85B09E" />
+              <Text style={[styles.textBold]}>temperature                        </Text>
+
+              {isPowerOn ? (
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 5 }}>
+                  <Text style={[styles.textBold2, { color: '#85B09E' }]}>
+                    {String(range)}
+                  </Text>
+                  <MaterialCommunityIcons name="temperature-celsius" color='#85B09E' size={26} marginTop={10} />
+                </View>
+              ) : (
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                  <Text style={[styles.textBold2, { color: '#C2C2C2' }]}>   - </Text>
+                  <MaterialCommunityIcons name="temperature-celsius" color='#C2C2C2' size={26} marginTop={10} />
+                </View>
+              )}
             </View>
             <View style={styles.separator}></View>
 
             <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 8 }}>
               <TouchableOpacity onPress={handleTempDown}>
-                <Icon name="ac-unit" size={30} color="#648E7E" />
+                <Icon name="ac-unit" size={30} color="#B0D5C1" />
               </TouchableOpacity>
               <Text>                                                             </Text>
-              <TouchableOpacity onPress={handleTempUp}>
-                <Icon name="whatshot" size={30} color="#648E7E" />
-              </TouchableOpacity>
+
+              <Icon name="whatshot" size={30} color="#B0D5C1" onPress={handleTempUp} />
+
             </View>
 
             <Slider
@@ -905,31 +1445,54 @@ function ACControl({ route }) {
               step={1} // 1단위로 값이 변경 
             />
 
-            <Text style={[styles.textBold2, { color: '#85B09E' }, { justifyContent: 'center' }]}>
-              {String(range)} {/* range 변수를 문자열로 변환 */}
-            </Text>
           </View>
 
           <View style={[styles.spaceContainer, { marginVertical: 20 }, { justifyContent: 'center' }]}></View>
 
-          <View style={[styles.valueContainer, { justifyContent: 'center' }, { backgroundColor: '#E6FAF5' }, { height: 90 }]}>
-            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-              <Text style={[styles.textBold]}> cooling mode                         </Text>
-              <Switch
-                trackColor={{ false: "#9BD5FF", true: "#9BD5FF" }}
-                value={isSwitchOn}
-                onValueChange={handleModeToggle}
-                style={styles.switch}
-              //color="#9BD5FF"
-              />
+          <View style={[styles.valueContainer, { justifyContent: 'center' }, { backgroundColor: '#E6FAF5' }, { height: 145 }]}>
+            <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 5, marginBottom: 20 }}>
+              <Text style={[styles.textBold]}>mode                                                  </Text>
+
             </View>
+
+            <View style={styles.separator}></View>
+
+            <View style={{ flexDirection: 'row', marginTop: 7 }}>
+              <View style={[styles.container3, { flex: 1, flexDirection: 'row', justifyContent: 'space-around' }]}>
+                <IconButton icon="water-off-outline" size={35} />
+                <Switch
+                  trackColor={{ false: "#A9FFCD", true: "#C5D5B0" }}
+                  value={isDehumidifyingModeOn}
+                  onValueChange={handleDehumidifyingModeToggle}
+                  style={styles.switch}
+                  marginTop={15}
+                />
+              </View>
+
+              <View style={styles.verticalseparator}></View>
+
+              <View style={[styles.container3, { flex: 1, flexDirection: 'row', justifyContent: 'space-around' }]}>
+                <IconButton icon="weather-windy" size={35} />
+                <Switch
+                  trackColor={{ false: "#A9FFCD", true: "#9BD5FF" }}
+                  value={isCoolingModeOn}
+                  onValueChange={handleCoolingModeToggle}
+                  style={styles.switch}
+                  marginTop={15}
+                />
+              </View>
+
+            </View>
+
           </View>
+
+          <View style={[styles.spaceContainer, { marginVertical: 10 }, { justifyContent: 'center' }]}></View>
 
         </View>
       )
       }
       {
-        acName === 'AC2' && (
+        acName === 'Whisen 2way' && (
           <View>
             <TouchableOpacity
               style={[styles.powerContainer, { justifyContent: 'center' }, { backgroundColor: '#E6FAF5' }]}
@@ -973,7 +1536,7 @@ function ACControl({ route }) {
         )
       }
       {
-        acName === 'AC3' && (
+        acName === 'Whisen 1way' && (
           <View>
             <TouchableOpacity
               style={[styles.powerContainer, { justifyContent: 'center' }, { backgroundColor: '#E6FAF5' }]}
@@ -1067,14 +1630,14 @@ function LightControl({ route }) {
     <View style={[styles.background, { alignItems: 'center' }]}>
 
       <View style={styles.container2}>
-        <Icon name="settings-remote" size={70} color="#73E1C5" />
+        <MaterialCommunityIcons name="home-lightbulb-outline" size={80} color="#73E1C5" />
       </View>
 
       <View style={[styles.spaceContainer, { justifyContent: 'center' }]}></View>
 
       <View style={[styles.valueContainer, { justifyContent: 'center' }, { backgroundColor: '#E6FAF5' }]}>
 
-        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 10 }}>
           <Text style={[styles.textBold]}>Light                                        </Text>
 
           <Switch
@@ -1157,7 +1720,7 @@ function DeleteScreen({ navigation }) {
   const handleDelete = (deviceName, setDevices) => {
     Alert.alert(
       "삭제 확인",
-      `${deviceName}을 삭제하시겠습니까?`,
+      `디바이스를 삭제하시겠습니까?`,
       [
         {
           text: "취소",
@@ -1166,8 +1729,21 @@ function DeleteScreen({ navigation }) {
         {
           text: "확인",
           onPress: () => {
-            setDevices(devices => devices.filter(dev => dev.name !== deviceName));
-            Alert.alert(`${deviceName}가 삭제되었습니다.`);
+            setDevices(devices => {
+              // 삭제할 디바이스의 인덱스를 찾습니다.
+              const indexToDelete = devices.findIndex(dev => dev.name === deviceName);
+
+              // 디바이스를 찾으면 배열에서 제거합니다.
+              if (indexToDelete !== -1) {
+                const updatedDevices = [...devices];
+                updatedDevices.splice(indexToDelete, 1);
+                return updatedDevices;
+              }
+
+              return devices; // 디바이스가 찾아지지 않으면 원래 배열을 반환합니다.
+            });
+
+            Alert.alert(`디바이스가 삭제되었습니다.`);
           }
         }
       ]
@@ -1178,7 +1754,6 @@ function DeleteScreen({ navigation }) {
   return (
     <ScrollView
       backgroundColor='#E8E8E8'
-      //contentContainerStyle={styles.background}
       keyboardShouldPersistTaps="handled" // 스크롤 시 키보드 닫기
     >
       <View style={styles.spaceContainer}></View>
@@ -1309,42 +1884,62 @@ export default function App() {
                 component={Dashboard}
                 options={({ navigation }) => ({
                   title: 'Dashboard',
-                  headerLeft: () => <Appbar.Action icon="delete-outline" size={35} color="#73E1C5" onPress={() => navigation.navigate('DeleteScreen')} />,
-                  headerRight: () => <Appbar.Action icon="plus" size={35} color="#73E1C5" onPress={() => navigation.navigate('TypeScreen')} />,
+                  headerLeft: () => <Appbar.Action icon="delete-outline" size={40} color="#73E1C5" onPress={() => navigation.navigate('DeleteScreen')} />,
+                  headerRight: () => <Appbar.Action icon="plus" size={40} color="#73E1C5" onPress={() => navigation.navigate('TypeScreen')} />,
                 })}
               />
-              <Stack.Screen name="TVControl" component={TVControl} />
-              <Stack.Screen name="ACControl" component={ACControl} />
-              <Stack.Screen name="LightControl" component={LightControl} />
+              <Stack.Screen name="TVControl" component={TVControl}
+                options={({ navigation }) => ({
+                  title: 'Device Type',
+                  headerLeft: () => <Appbar.Action icon="home" size={45} color="#73E1C5" onPress={() => navigation.navigate('Dashboard')} />,
+                })} />
+              <Stack.Screen name="ACControl" component={ACControl}
+                options={({ navigation }) => ({
+                  title: 'Device Type',
+                  headerLeft: () => <Appbar.Action icon="home" size={45} color="#73E1C5" onPress={() => navigation.navigate('Dashboard')} />,
+                })} />
+              <Stack.Screen name="LightControl" component={LightControl}
+                options={({ navigation }) => ({
+                  title: 'Device Type',
+                  headerLeft: () => <Appbar.Action icon="home" size={45} color="#73E1C5" onPress={() => navigation.navigate('Dashboard')} />,
+                })} />
               <Stack.Screen
                 name="TypeScreen"
                 component={TypeScreen}
                 options={({ navigation }) => ({
                   title: 'Device Type',
+                  headerLeft: () => <Appbar.Action icon="home" size={45} color="#73E1C5" onPress={() => navigation.navigate('Dashboard')} />,
                 })} />
               <Stack.Screen
                 name="AddTVScreen"
                 component={AddTVScreen}
                 options={({ navigation }) => ({
                   title: 'TV model',
+                  headerTintColor: "#72D2BA",
+                  headerTitleStyle: { color: 'black' },
                 })} />
               <Stack.Screen
                 name="AddACScreen"
                 component={AddACScreen}
                 options={({ navigation }) => ({
                   title: 'AC model',
+                  headerTintColor: "#72D2BA",
+                  headerTitleStyle: { color: 'black' },
                 })} />
               <Stack.Screen
                 name="AddLightScreen"
                 component={AddLightScreen}
                 options={({ navigation }) => ({
                   title: 'Light model',
+                  headerTintColor: "#72D2BA",
+                  headerTitleStyle: { color: 'black' },
                 })} />
               <Stack.Screen
                 name="DeleteScreen"
                 component={DeleteScreen}
                 options={({ navigation }) => ({
                   title: 'Delete Device',
+                  headerLeft: () => <Appbar.Action icon="home" size={45} color="#73E1C5" onPress={() => navigation.navigate('Dashboard')} />,
                 })} />
             </Stack.Navigator>
           </NavigationContainer>
